@@ -3,6 +3,7 @@ import os
 import django
 import requests
 import json
+from django.core.exceptions import MultipleObjectsReturned
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "youtube_fetch.settings")
 django.setup()
 from video_data.models import YoutubeData
@@ -25,7 +26,9 @@ def populate_db():
         channel_id = data.get('snippet')['channelId']
         
         try:
-            vid_data = YoutubeData.objects.get(vid_id=vid_id)
+            vid_data = YoutubeData.objects.get(video_id=vid_id)
+            print('Data already present')
+        except MultipleObjectsReturned:
             print('Data already present')
         except:
             new_vid_data = YoutubeData(
