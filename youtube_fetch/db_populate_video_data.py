@@ -8,7 +8,10 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "youtube_fetch.settings")
 django.setup()
 from video_data.models import YoutubeData
 from video_data.serializers import YoutubeDataSerializer
-
+from celery import shared_task
+# AIzaSyAIcZTxLObmbN5wY0TW4kW93NwNL14urrg
+# AIzaSyDWFWe2slXJZnqbxXNNaN9byLswFIXiuQY
+@shared_task()
 def populate_db():
     api_key = 'AIzaSyCxucWHdXBlRZ8JXOnqGrMyl3FRGvbS2G8'
     url = f'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&order=date&publishedAfter=2023-01-17T16%3A23%3A36Z&q=cricket&key={api_key}'

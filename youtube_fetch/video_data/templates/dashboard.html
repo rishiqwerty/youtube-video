@@ -1,7 +1,18 @@
-<form method="get">
+<form action="search" method="get">
     <input name="q" type="text" placeholder="Search...">
 </form>
-<a href="..">Dashboard</a>
+<form method="get">
+    <input name="name_filter" type="text" placeholder="video_title">
+    <input name="channel_filter" type="text" placeholder="channel_title">
+    <input type="submit">
+</form>
+<form method="get">
+    <span>Sort by:</span>
+        <select name="sort">
+          <option value="-published_time">newest</option>
+          <option value="published_time">oldest</option>
+          <input type="submit" value="sort">
+</form>
 {% for video_data in page_obj %}
     <div>
         <img src={{ video_data.thumbnails.default.url }}>
@@ -19,7 +30,7 @@
         {% if page_obj.has_previous %}
             {% if q %}
                 <a href="?page=1&q={{ q }}">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}&q={{ q }}">previous</a>
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}">previous</a>
             {% else %}
                 <a href="?page=1">&laquo; first</a>
                 <a href="?page={{ page_obj.previous_page_number }}">previous</a>
@@ -32,8 +43,8 @@
 
         {% if page_obj.has_next %}
             {% if q %}
-                <a href="?page={{ page_obj.next_page_number }}&q={{ q }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">last &raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ sort }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&sort={{ sort }}">last &raquo;</a>
             {% else %}
                 <a href="?page={{ page_obj.next_page_number }}">next</a>
                 <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>

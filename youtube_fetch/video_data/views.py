@@ -29,27 +29,50 @@ class LatestVideos(ListAPIView):
 
 
 def listing(request):
-    q = request.GET.get('q')
+    q = request.GET.get('q')    
     if q:
-        queryset = YoutubeData.objects.filter(Q(video_title__contains=q) | Q(video_title__contains=q)).order_by('-published_time')
+        queryset = YoutubeData.objects.filter(Q(video_title__contains=q) | Q(description__contains=q)).order_by('-published_time')
     else:
         queryset = YoutubeData.objects.all().order_by('-published_time')
-    paginator = Paginator(queryset, 10) # Show 25 contacts per page.
+    
+    paginator = Paginator(queryset, 10)
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'all_videos.html', {'page_obj': page_obj, 'q':q})
 
-class SearchVideos(APIView):
-    renderer_classes = [TemplateHTMLRenderer] 
-    template_name = 'all_videos.html'
+# class SearchVideos(APIView):
+#     renderer_classes = [TemplateHTMLRenderer] 
+#     template_name = 'all_videos.html'
 
-    def get(self, request):
-        if 'q' in request.GET:
-            q = request.GET['q']
-            youtube_data = YoutubeData.objects.filter(Q(video_title__contains=q) | Q(video_title__contains=q)).order_by('-published_time')
-            serializer = YoutubeDataSerializer()
-            return Response({'youtube_data': youtube_data})
+#     def get(self, request):
+#         if 'q' in request.GET:
+#             q = request.GET['q']
+#             youtube_data = YoutubeData.objects.filter(Q(video_title__contains=q) | Q(video_title__contains=q)).order_by('-published_time')
+#             serializer = YoutubeDataSerializer()
+#             return Response({'youtube_data': youtube_data})
+#         else:
+#             youtube_data = YoutubeData.objects.all().order_by('-published_time')
+#             return Response({'youtube_data': youtube_data})
+
+
+def dashboard(request):
+    sort = request.GET.get('sort')
+    vid_title = request.GET.get('name_filter')
+    channel = request.GET.get('channel_filter')
+    if sort:
+        if vid_title or channel:
+            queryset = YoutubeData.objects.filter(Q(video_title__contains=vid_title) | Q(channel_nname__contains=channel)).order_by(sort)
         else:
-            youtube_data = YoutubeData.objects.all().order_by('-published_time')
-            return Response({'youtube_data': youtube_data})
+            queryset = YoutubeData.objects.all().order_by(sort)
+    else:
+        if vid_title or channel:
+            queryset = YoutubeData.objects.filter(Q(video_title__contains=vid_title) | Q(channel_name__contains=channel)).order_by('-published_time')
+        else:
+            queryset = YoutubeData.objects.all().order_by('-published_time')
+    
+    paginator = Paginator(queryset, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'dashboard.html', {'page_obj': page_obj, 'sort':sort})
