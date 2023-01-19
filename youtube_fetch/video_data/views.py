@@ -32,7 +32,7 @@ def search_listing(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'all_videos.html', {'page_obj': page_obj, 'q':q})
 
-
+# Home page can show data in order format by publishing date
 def dashboard(request):
     sort = request.GET.get('sort')
     vid_title = request.GET.get('name_filter')
