@@ -17,5 +17,9 @@
 Home page will appear. Here we can sort data by Newest or oldest publishing date
 ![doc](readme_images/2.png)
 
+- http://localhost:8000/search will open search page, here all videos can be found in descending order and can search for videos also
+
 In search if we search some phrases, only video's whose title/description matches the pattern will appear in the result. Per page only shows 10 data. We can navigate to different page with next button.
 ![doc](readme_images/3.png)
+
+- http://localhost:8000/rest contains restAPI, it has pagination and search options
