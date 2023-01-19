@@ -1,28 +1,91 @@
-<form method="get">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Poppins', sans-serif;
+        }
+        .header{
+            display: flex;
+        }
+        .header form{
+            width: 100%;
+        }
+        #home{
+            font-weight: bold
+        }
+        #search input{
+            width: 80%;
+            justify-self: center;
+        }
+        a{
+            text-decoration: None;
+            color: black;
+        }
+        #date{
+            color: gray;
+        }
+        .video-list{
+            display: flex;
+            column-gap: 20px;
+        }
+        #video{
+            padding: 1vw 2vh;
+            display: flex;
+            flex-direction: column;
+            row-gap: 20px;
+            background-color: #eeeeee;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .video-details{
+            display: flex;
+            flex-direction: column;
+        }
+        #thumbnail{
+            margin: 20px 0;
+            width: 20%;
+            height: 100%;
+            align-self: center;
+            border-radius: 5px;
+        }
+        #navigate-page{
+            background-color: #dedb72;
+            border-radius: 7px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+
+<div class="header">
+<form id="search" method="get">
     <input name="q" type="text" placeholder="Search...">
 </form>
-<a href="..">Dashboard</a>
+<a id="home" href="..">Home</a>
+</div>
+<div id="video">
 {% for video_data in page_obj %}
-    <div>
-        <img src={{ video_data.thumbnails.default.url }}>
-        <div>
+    <div class="video-list">
+        <img id='thumbnail' src={{ video_data.thumbnails.medium.url }}>
+        <div class='video-details'>
             <h4>{{ video_data.video_title }}</h4>
-            <p>{{ video_data.published_time }}</p>
+            <p id='date'>{{ video_data.published_time }}</p>
             <p>{{ video_data.description }}</p>
         </div>
 
     </div>
 {% endfor %}
-
+</div>
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
             {% if q %}
-                <a href="?page=1&q={{ q }}">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}&q={{ q }}">previous</a>
+                <a id="navigate-page" href="?page=1&q={{ q }}">&laquo; first</a>
+                <a id="navigate-page" href="?page={{ page_obj.previous_page_number }}&q={{ q }}">previous</a>
             {% else %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <a id="navigate-page" href="?page=1">&laquo; first</a>
+                <a id="navigate-page" href="?page={{ page_obj.previous_page_number }}">previous</a>
             {% endif %}
         {% endif %}
 
@@ -32,11 +95,11 @@
 
         {% if page_obj.has_next %}
             {% if q %}
-                <a href="?page={{ page_obj.next_page_number }}&q={{ q }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">last &raquo;</a>
+                <a id="navigate-page" href="?page={{ page_obj.next_page_number }}&q={{ q }}">next</a>
+                <a id="navigate-page" href="?page={{ page_obj.paginator.num_pages }}&q={{ q }}">last &raquo;</a>
             {% else %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                <a id="navigate-page" href="?page={{ page_obj.next_page_number }}">next</a>
+                <a id="navigate-page" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
             {% endif %}
         {% endif %}
     </span>

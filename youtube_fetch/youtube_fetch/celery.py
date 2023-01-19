@@ -1,6 +1,7 @@
 from datetime import timedelta
 import os
 from celery import Celery
+from celery.schedules import crontab
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "youtube_fetch.settings")
 app = Celery("youtube_fetch")
@@ -10,8 +11,9 @@ app.autodiscover_tasks(
 )
 
 app.conf.beat_schedule = {
-    "video_data-task": {
+    "populate_db": {
         "task": "db_populate_video_data.populate_db",
-        "schedule": timedelta(seconds=15),
+        # "schedule": 20.0
+        "schedule": 60.0
     }
 }
