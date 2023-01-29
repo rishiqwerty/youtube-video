@@ -12,24 +12,22 @@ from rest_framework.filters import SearchFilter
 from django.core.paginator import Paginator
 
 
-"""
-    Rest API with pagination and search functionality
-"""
-
-
 class LatestVideos(ListAPIView):
+    """
+    Rest API with pagination and search functionality
+    """
+
     queryset = YoutubeData.objects.all().order_by("-published_time")
     serializer_class = YoutubeDataSerializer
     filter_backends = [SearchFilter]
     search_fields = ["video_title", "description"]
 
 
-"""
-    Search view displays data in descending order and also we can search data here
-"""
-
-
 def search_listing(request):
+    """
+    Search view displays data in descending order and also we can search data here
+    """
+
     q = request.GET.get("q")
     if q:
         queryset = YoutubeData.objects.filter(
@@ -45,26 +43,27 @@ def search_listing(request):
     return render(request, "all_videos.html", {"page_obj": page_obj, "q": q})
 
 
-"""
-    This is home page here we can see the sorted data either descending ordered or ascending
-"""
-
-
 def dashboard(request):
+    """
+    This is home page here we can see the sorted data either descending ordered or ascending
+    """
+
     sort = request.GET.get("sort")
     vid_title = request.GET.get("name_filter")
     channel = request.GET.get("channel_filter")
     if sort:
         if vid_title or channel:
             queryset = YoutubeData.objects.filter(
-                Q(video_title__contains=vid_title) | Q(channel_nname__contains=channel)
+                Q(video_title__contains=vid_title) | Q(
+                    channel_nname__contains=channel)
             ).order_by(sort)
         else:
             queryset = YoutubeData.objects.all().order_by(sort)
     else:
         if vid_title or channel:
             queryset = YoutubeData.objects.filter(
-                Q(video_title__contains=vid_title) | Q(channel_name__contains=channel)
+                Q(video_title__contains=vid_title) | Q(
+                    channel_name__contains=channel)
             ).order_by("-published_time")
         else:
             queryset = YoutubeData.objects.all().order_by("-published_time")

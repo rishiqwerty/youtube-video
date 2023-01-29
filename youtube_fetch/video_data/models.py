@@ -10,8 +10,14 @@ class YoutubeData(models.Model):
     urls = models.URLField(max_length=200)
     channel_name = models.CharField(max_length=100, null=True, blank=True)
     channel_id = models.CharField(max_length=100)
-    creation_time = models.DateTimeField(auto_created=True,  auto_now_add=True) # Entry time of the data
+    creation_time = models.DateTimeField(
+        auto_created=True, auto_now_add=True
+    )  # Entry time of the data
+
     class Meta:
+        indexes = (
+            models.Index(fields=['published_time'], name='pubtime_idx'),
+        )
         ordering = [
-            '-id',
+            "-id",
         ]

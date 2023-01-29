@@ -1,5 +1,4 @@
 from celery import shared_task
-from video_data.models import YoutubeData
 from datetime import datetime, timedelta
 import os
 import django
@@ -10,12 +9,13 @@ from django.core.exceptions import MultipleObjectsReturned
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "youtube_fetch.settings")
 django.setup()
 
-'''
-    Celery task to populate db every minute
-'''
+from video_data.models import YoutubeData
 
 @shared_task
 def populate_db():
+    """
+    Celery task to populate db every minute
+    """
     api_key = [
         "AIzaSyAONpP4UI_tDPJ-jIjQvVkGuRkKVE2hggo",
         "AIzaSyDWFWe2slXJZnqbxXNNaN9byLswFIXiuQY",

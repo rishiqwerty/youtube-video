@@ -1,5 +1,5 @@
 version: "3.8"
-   
+
 services:
     django:
         build: .
@@ -14,12 +14,12 @@ services:
             - SECRET_KEY='django-insecure-mbn=yq+ios7pngj531t(zk7-7xm3#6)sv$2!5s@3ef)59j$3j$'
         depends_on:
             - redis
-    
+
     redis:
         image: "redis:alpine"
         expose:
             - 6379
-    
+
     celery:
         build: .
         command: celery -A youtube_fetch worker -l INFO
@@ -39,10 +39,3 @@ services:
 
         environment:
             - DEBUG=1
-        # depends_on:
-        #     - redis
-            # - celery
-
-        
-# volumes:
-#     pgdata:
