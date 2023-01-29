@@ -10,6 +10,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.filters import SearchFilter
 
 from django.core.paginator import Paginator
+from django.core.cache import cache
 
 
 class LatestVideos(ListAPIView):
@@ -30,12 +31,21 @@ def search_listing(request):
 
     q = request.GET.get("q")
     if q:
-        queryset = YoutubeData.objects.filter(
-            Q(video_title__contains=q) | Q(description__contains=q)
-        ).order_by("-published_time")
+        data = cache.get(q)
+        if not data:
+            queryset = YoutubeData.objects.filter(
+                Q(video_title__contains=q) | Q(description__contains=q)
+            ).order_by("-published_time")
+            cache.set(q, queryset, 50)
+        else:
+            queryset = data
     else:
-        queryset = YoutubeData.objects.all().order_by("-published_time")
-
+        data = cache.get('data')
+        if not data:
+            queryset = YoutubeData.objects.all().order_by("-published_time")
+            cache.set('data', queryset, 10)
+        else:
+            queryset = data
     paginator = Paginator(queryset, 10)
 
     page_number = request.GET.get("page")
